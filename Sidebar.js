@@ -109,8 +109,8 @@ const isWeb = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#007aff", // This should be the background color of your sidebar
-    ...(isWeb() ? { borderRadius: 35 } : {}), // Apply rounded corners for web only
+    backgroundColor: "#007aff",
+    ...(isWeb() ? { borderRadius: 35 } : {}),
   },
   sidebarWeb: {
     position: "fixed",
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 80, // Adjust the height to match your design
     flexDirection: "row",
+    //backgroundColor: "red",
     justifyContent: "space-around",
     alignItems: "center",
   },

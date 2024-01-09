@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,122 +8,139 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Modal,
 } from "react-native";
 import Sidebar from "./Sidebar";
+import { Picker } from "@react-native-picker/picker";
+
 import Icon from "react-native-vector-icons/Ionicons";
-
-const { width, height } = Dimensions.get("window");
-
-const Settings = ({ navigation }) => {
-  return (
-    <View style={styles.appContainer}>
-      {isWeb() && <Sidebar />}
-      <View style={styles.mainContent}>
-        {isWeb() && <Top />}
-        <HomeContent navigation={navigation} />
-      </View>
-      {!isWeb() && <Sidebar />}
-    </View>
-  );
-};
-
-const Top = () => {
-  return (
-    <View style={styles.top}>
-      <Text style={styles.toptext}>These are all your reports</Text>
-    </View>
-  );
-};
-
-const HomeContent = ({ navigation }) => {
-  const handleTakeTestPress = () => {
-    navigation.navigate("Instructions");
-  };
-
-  //   const Report123 = () => ( arrow-forward
-  //     <View style={styles.report}>
-  //       <View style={styles.ReportPic}>
-  //         <Image
-  //           source={require("./media/reporticon.png")}
-  //           style={styles.profilePicc}
-  //         />
-  //       </View>
-  //       <View style={styles.reportTextContainer}>
-  //         <Text style={styles.reporttextbold}>Report Heading</Text>
-  //         <Text style={styles.reporttext}>Report Description</Text>
-  //       </View>
-  //       <Image
-  //         source={require("./media/downloadicon.png")}
-  //         style={styles.profilePiccc}
-  //       />
-  //     </View>
-  //   );
-
-  const Report123 = () => (
-    <View style={styles.report}>
-      <View style={styles.ReportPic}>
-        <Image
-          source={require("./media/reporticon.png")}
-          style={styles.profilePicc}
-        />
-      </View>
-      <View style={styles.reportTextContainer}>
-        {/* <Text style={styles.reporttextbold}>Report Heading</Text> */}
-        <Text style={styles.reporttext}>Report Description</Text>
-      </View>
-      <Image
-        source={require("./media/downloadicon.png")}
-        style={styles.profilePiccc}
-      />
-    </View>
-  );
-
-  return (
-    <ScrollView style={styles.contentContainer}>
-      {/* <View style={styles.SimpleborderContainer}></View>
-      <View style={styles.profileContainer}>
-        <Image source={require("./media/logo.png")} style={styles.profilePic} />
-        <Text>HELLO ALI</Text>
-        <Text>How is it going today?</Text>
-      </View> */}
-      <View style={styles.descriptionContainer}>
-        <View style={styles.profileContainer}>
-          <Image
-            source={require("./media/logo.png")}
-            style={styles.profilePic}
-          />
-          <Text>Abdul ALI</Text>
-          <Text>abdulali@gmail.com</Text>
-        </View>
-        <Report123 />
-        {/* <Report123 />
-        <Report123 />
-        <Report123 />
-        <Report123 />
-        <Report123 />
-        <Report123 />
-        <Report123 />
-        <Report123 /> */}
-
-        {/* <TouchableOpacity
-          style={styles.testButton}
-          onPress={handleTakeTestPress}
-        >
-          <Text style={styles.testButtonText}>Take Test</Text>
-        </TouchableOpacity> */}
-      </View>
-    </ScrollView>
-  );
-};
-
+import { useNavigation } from "@react-navigation/native";
 const isWeb = () => {
   return Platform.OS === "web";
 };
 
+const { width, height } = Dimensions.get("window");
+const reportData = [
+  {
+    icon: "person-outline",
+    description: "Account",
+    targetScreen: "Settings",
+  },
+  {
+    icon: "people-sharp",
+    description: "About US",
+    targetScreen: "Settings",
+  },
+  {
+    icon: "globe-outline",
+    description: "Languages",
+    isLanguagePicker: true,
+  },
+  { icon: "newspaper", description: "Reports", targetScreen: "Reports" },
+  {
+    icon: "shield",
+    description: "Private Policy",
+    targetScreen: "Settings",
+  },
+];
+
+const Settings = ({ navigation }) => {
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
+
+  const handleTakeTestPress = () => {
+    navigation.navigate("Instructions");
+  };
+
+  const Report123 = ({ icon, description, targetScreen, isLanguagePicker }) => (
+    <TouchableOpacity
+      style={styles.report}
+      onPress={() => {
+        if (isLanguagePicker) {
+          setLanguageModalVisible(true);
+        } else {
+          navigation.navigate(targetScreen);
+        }
+      }}
+    >
+      <Icon name={icon} size={isWeb() ? 30 : 30} color="black" />
+      <View style={styles.reportTextContainer}>
+        <Text style={styles.reporttext}>{description}</Text>
+      </View>
+      <Icon name="arrow-forward" size={isWeb() ? 30 : 30} color="black" />
+    </TouchableOpacity>
+  );
+
+  const renderLanguagePicker = () => (
+    <Modal
+      transparent={true}
+      visible={isLanguageModalVisible}
+      animationType="slide"
+      onRequestClose={() => setLanguageModalVisible(false)}
+    >
+      <TouchableOpacity
+        style={styles.languageModalContainer}
+        activeOpacity={1}
+        onPressOut={() => setLanguageModalVisible(false)}
+      >
+        <View style={styles.languageModalContent}>
+          <Picker
+            selectedValue={selectedLanguage}
+            onValueChange={(itemValue) => {
+              setSelectedLanguage(itemValue);
+              setLanguageModalVisible(false); // Close the modal on language selection
+            }}
+          >
+            <Picker.Item label="English" value="English" />
+            <Picker.Item label="Spanish" value="Spanish" />
+            <Picker.Item label="French" value="French" />
+            <Picker.Item label="German" value="German" />
+            <Picker.Item label="Chinese" value="Chinese" />
+          </Picker>
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  );
+
+  return (
+    <View style={styles.appContainer}>
+      {isWeb() && <Sidebar />}
+      <View style={styles.mainContent}>
+        <ScrollView style={styles.contentContainer}>
+          <View style={styles.descriptionContainer}>
+            <View style={styles.profileContainer}>
+              <Image
+                source={require("./media/user1.png")}
+                style={styles.profilePic}
+              />
+              <Text>Abdul ALI</Text>
+              <Text>abdulali@gmail.com</Text>
+            </View>
+            {reportData.map((data, index) => (
+              <Report123
+                key={index}
+                icon={data.icon}
+                description={data.description}
+                targetScreen={data.targetScreen}
+                isLanguagePicker={data.isLanguagePicker}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+      {!isWeb() && <Sidebar />}
+      {renderLanguagePicker()}
+    </View>
+  );
+};
+
+// ... (rest of the code remains unchanged)
+
 const styles = StyleSheet.create({
+  // ... (existing styles remain unchanged)
   report: {
     borderRadius: 20,
-    height: 120,
+    height: 50,
     margin: 5,
     borderWidth: 1,
     borderColor: "grey",
@@ -134,23 +151,15 @@ const styles = StyleSheet.create({
   },
   reportTextContainer: {
     flex: 1,
+    padding: 10,
+    alignSelf: "center",
     marginLeft: 10,
   },
   reporttext: {
     flex: 1,
-    paddingLeft: 15,
+    paddingLeft: 0,
     paddingRight: 15,
-    paddingBottom: 15,
     fontSize: 18,
-  },
-  reporttextbold: {
-    flex: 1,
-    padding: 15,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  ReportPic: {
-    justifyContent: "center",
   },
   toptext: {
     fontSize: 30,
@@ -183,51 +192,34 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginBottom: 8,
   },
-  profilePicc: {
-    width: isWeb() ? 80 : 50,
-    height: isWeb() ? 80 : 50,
-    marginBottom: 8,
-  },
-  profilePiccc: {
-    width: isWeb() ? 80 : 50,
-    height: isWeb() ? 80 : 50,
-    marginRight: 8,
-  },
-  userName: {
-    fontWeight: "bold",
-    fontSize: 22,
-  },
-  userGreeting: {
-    fontSize: 18,
-    color: "#666",
-    marginBottom: 20,
-  },
   descriptionContainer: {
     fontSize: 20,
     paddingHorizontal: 20,
-  },
-  testButton: {
-    backgroundColor: "#007bff",
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 20,
-    maxWidth: 250,
-    alignSelf: "center",
-  },
-  testButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   contentContainer: {
     flex: 1,
     marginTop: 0,
     marginBottom: !isWeb() ? 80 : 0,
   },
-  SimpleborderContainer: {
-    borderRadius: 20,
+  languageModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  languageModalContent: {
+    width: isWeb() ? 400 : 300, // Set a larger width for web
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    elevation: 5,
+  },
+  closeButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#ddd",
+    borderRadius: 5,
+    alignItems: "center",
   },
 });
 
