@@ -93,9 +93,9 @@ const Settings = ({ navigation }) => {
           >
             <Picker.Item label="English" value="English" />
             <Picker.Item label="Spanish" value="Spanish" />
-            <Picker.Item label="French" value="French" />
+            <Picker.Item label="Greek" value="Greek" />
             <Picker.Item label="German" value="German" />
-            <Picker.Item label="Chinese" value="Chinese" />
+            <Picker.Item label="Urdu" value="Urdu" />
           </Picker>
         </View>
       </TouchableOpacity>

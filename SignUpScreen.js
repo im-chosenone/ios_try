@@ -92,8 +92,8 @@ const SignUpScreen = ({ navigation }) => {
               { backgroundColor: agree ? "#4630EB" : "grey" },
             ]}
             disabled={!agree}
-            onPress={handleSignUp}
-            //onPress={() => navigation.navigate("InformationScreen")}
+            // onPress={handleSignUp}
+            onPress={() => navigation.navigate("SignInScreen")}
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>

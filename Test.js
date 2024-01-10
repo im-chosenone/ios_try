@@ -15,7 +15,7 @@ import {
 import Sidebar from "./Sidebar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import cookieImage from "./media/cookie.png";
-import Recording from "./Recording.js";
+// import Recording from "./Recording.js";
 
 const isWeb = () => {
   return Platform.OS === "web";
@@ -69,7 +69,7 @@ const InstructionsContent = ({ navigation }) => {
       </View>
 
       <View style={styles.descriptionContainer}></View>
-      <Recording />
+      {/* <Recording /> */}
       <TouchableOpacity style={styles.testButton} onPress={handleTakeTestPress}>
         <Text style={styles.testButtonText}>Take Test</Text>
       </TouchableOpacity>

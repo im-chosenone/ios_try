@@ -36,16 +36,16 @@ const InformationScreen = ({ navigation }) => {
     "Spanish",
     "French",
     "German",
-    "Other",
+    "Urdu",
   ];
-  const genderOptions = ["Select Gender", "Male", "Female", "Other"];
+  const genderOptions = ["Select Gender", "Male", "Female"];
   const educationOptions = [
     "Select Education",
+    "Middle School",
     "High School",
     "Bachelor's Degree",
     "Master's Degree",
     "Ph.D.",
-    "Other",
   ];
 
   // const handleSubmission = () => {
