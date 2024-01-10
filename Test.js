@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  ScrollView,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/Ionicons"; // Import Icon from Ionicons
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Sidebar from "./Sidebar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import cookieImage from "./media/cookie.png";
-// import Recording from "./Recording.js";
 
 const isWeb = () => {
   return Platform.OS === "web";
@@ -42,15 +39,21 @@ const InstructionsContent = ({ navigation }) => {
     navigation.navigate("Daignostic");
   };
 
+  const [isRecording, setIsRecording] = useState(false);
+
+  const handleToggleRecording = () => {
+    setIsRecording((prevState) => !prevState);
+    // Add your logic for starting/stopping recording here
+  };
+
   return (
     <View>
       <View style={styles.profileContainer}>
         {isWeb() ? (
           <View>
             <View style={styles.webimage}>
-              {/* Use standard HTML img tag for web */}
               <img
-                src={cookieImage} // Assuming cookieImage is a local import
+                src={cookieImage}
                 style={{ width: "60%", height: "80%" }}
                 alt="Cookie Image"
               />
@@ -58,21 +61,52 @@ const InstructionsContent = ({ navigation }) => {
           </View>
         ) : (
           <View style={styles.androidimage}>
-            {/* Keep using React Native Image for mobile */}
-            {/* <Image source={cookieImage} resizeMode="cover" /> */}
-            <Image
-              source={cookieImage}
-              style={{ width: 350, height: 300 }} // Adjust these values as needed
-            />
+            <Image source={cookieImage} style={{ width: 350, height: 300 }} />
           </View>
         )}
       </View>
 
-      <View style={styles.descriptionContainer}></View>
-      {/* <Recording /> */}
-      <TouchableOpacity style={styles.testButton} onPress={handleTakeTestPress}>
-        <Text style={styles.testButtonText}>Take Test</Text>
-      </TouchableOpacity>
+      <View style={styles.outerrecordingbutton}>
+        <View style={[styles.recordingbutton, styles.blackButton]}>
+          <TouchableOpacity
+            style={styles.recordingButtonContainer}
+            onPress={handleToggleRecording}
+          >
+            <Icon
+              name="reload"
+              size={30}
+              color="#ffffff"
+              style={styles.micIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.recordingbutton, styles.middleButton]}>
+          <TouchableOpacity
+            style={styles.recordingButtonContainer}
+            onPress={handleToggleRecording}
+          >
+            <Icon
+              name={isRecording ? "mic-sharp" : "mic-off-sharp"}
+              size={50}
+              color="#ffffff"
+              style={styles.micIcon}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.recordingbutton, styles.blackButton]}>
+          <TouchableOpacity
+            style={styles.recordingButtonContainer}
+            onPress={handleToggleRecording}
+          >
+            <Icon
+              name="play"
+              size={30}
+              color="#ffffff"
+              style={styles.micIcon}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -98,19 +132,10 @@ const styles = StyleSheet.create({
     marginTop: isWeb() ? 0 : 20,
     ...(isWeb() ? { marginLeft: 120, marginTop: 20 } : {}),
   },
-  profileContainer: {
-    //  backgroundColor: "red",
-    alignItems: "center",
-  },
-  androidimage: {
-    // width: "60%",
-    // height: "80%",
-    // overflow: "hidden",
-    // borderRadius: 20,
-  },
-
+  profileContainer: {},
+  androidimage: {},
   testButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#007aff",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
@@ -120,7 +145,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   testButtonText: {
-    color: "white", // Change this color to ensure visibility
+    color: "white",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -130,21 +155,49 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: "5%",
   },
-
   descriptionContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
-    //backgroundColor: "yellow", // Changed from "Red" to "red"
-    //alignItems: "center",
   },
-
   webimage: {
-    //backgroundColor: "green",
-    //justifyContent: "center",
     alignItems: "center",
   },
+  outerrecordingbutton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  recordingbutton: {
+    backgroundColor: "#007aff",
+    borderRadius: 30,
+    marginRight: 10,
+  },
+  middleButton: {
+    width: 80, // Set the width for the middle button
+  },
+  blackButton: {
+    backgroundColor: "black", // Set background color for left and right buttons
+  },
+  recordingButtonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    padding: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: -3,
+    elevation: -3,
+    width: 300,
+    height: 300,
+    resizeMode: "cover",
+  },
+  micIcon: {},
 });
 
 export default Test;

@@ -27,9 +27,7 @@ const SignUpScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
-    if (name === "ali") {
-    }
-    // Implement your sign-up logic here
+    navigation.navigate("SignIpScren");
   };
 
   return (
@@ -91,9 +89,8 @@ const SignUpScreen = ({ navigation }) => {
               styles.button,
               { backgroundColor: agree ? "#4630EB" : "grey" },
             ]}
+            onPress={() => navigation.navigate("SignIn")}
             disabled={!agree}
-            // onPress={handleSignUp}
-            onPress={() => navigation.navigate("SignInScreen")}
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
